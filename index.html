@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Bee Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #wordInput {
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Spelling Bee Game</h1>
+    <button onclick="startGame()">🎤 Iniciar Juego</button>
+    <button onclick="repeatWord()">🔄 Repetir Palabra</button>
+    <br>
+    <input type="text" id="wordInput" placeholder="Escribe la palabra aquí">
+    <button onclick="checkWord()">Enviar</button>
+    <p id="message">Intentos restantes: 3</p>
+    <p id="score">Puntaje: 0</p>
+    <p id="wordCount">Palabras jugadas: 0/10</p>
+
+    <script>
+        const words = [
+            "actor", "actually", "adventure", "after", "agree", "airport", "alone", "already", "also", "amazing",
+            "ambulance", "anyone", "appear", "arrive", "artist", "astronaut", "autumn", "backpack", "before", "believe",
+            "belt", "bicycle", "biscuit", "bored", "borrow", "bracelet", "break", "bridge", "broken", "business", "butterfly",
+            "calendar", "cartoon", "castle", "century", "cereal", "channel", "cheap", "chopsticks", "collect", "college",
+            "competition", "conversation", "costume", "creature", "crown", "dark", "december", "decide", "delicious",
+            "designer", "dictionary", "dinosaur", "disappear", "eagle", "earth", "east", "elbow", "else", "empty",
+            "engine", "engineer", "enough", "entrance", "envelope", "environment", "excellent", "excited", "exit", "expensive",
+            "explain", "explore", "extinct", "factory", "february", "feel", "find out", "finger", "finish", "fire fighter",
+            "flashlight", "foggy", "forget", "friendly", "frightening", "furry", "gate", "glove", "glass", "go away",
+            "go out", "happen", "heaven", "honey", "hope", "horrible", "husband", "interesting", "journalist", "just",
+            "july", "keep", "knife", "knee", "kind", "language", "large", "leave", "letter", "light", "magazine", "married",
+            "meal", "mechanic", "medicine", "meeting", "missing", "museum", "necklace", "nest", "news", "newspaper", "noisy",
+            "north", "ocean", "octopus", "office", "pyjamas", "passenger", "path", "perhaps", "piece", "pilot", "platform",
+            "pleased", "pocket", "poor", "postcard", "programme", "puzzle", "pyramid", "queen", "quite", "race", "ready",
+            "repair", "repeat", "restaurant", "right", "science", "scissors", "score", "screen", "search", "several",
+            "shampoo", "shelf", "should", "singer", "silver", "smell", "snowball", "snowman", "soap", "soon", "soup", "south",
+            "spaceship", "speak", "spend", "spoon", "stay", "step", "stone", "storm", "strange", "strawberry", "stream",
+            "student", "subject", "suddenly", "suitcase", "summer", "sunglasses", "sure", "swing", "take", "taste", "team",
+            "telephone", "thousand", "through", "tidy", "together", "tomorrow", "tonight", "tortoise", "touch", "turn on",
+            "turn off", "twice", "tire", "umbrella", "uniform", "usually", "unusually", "unhappy", "waiter", "waitress",
+            "warm", "wheel", "whistle", "wife", "wild", "winner", "winter", "wish", "wonderful", "wood", "zero"
+        ];
+
+        let currentWord = "";
+        let attempts = 3;
+        let score = 0;
+        let wordsPlayed = 0;
+        let englishVoice = null;
+
+        function loadVoices() {
+            let voices = speechSynthesis.getVoices();
+            englishVoice = voices.find(voice => voice.lang.startsWith("en"));
+        }
+
+        function startGame() {
+            if (wordsPlayed >= 10) {
+                document.getElementById("message").textContent = "Juego terminado. Puntaje final: " + score;
+                return;
+            }
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            attempts = 3;
+            document.getElementById("message").textContent = "Intentos restantes: " + attempts;
+            repeatWord();
+        }
+
+        function repeatWord() {
+            if (!currentWord) return;
+            let speech = new SpeechSynthesisUtterance(currentWord);
+            speech.lang = "en-US";
+            speech.rate = 0.5;
+            if (englishVoice) {
+                speech.voice = englishVoice;
+            }
+            speechSynthesis.speak(speech);
+        }
+
+        function checkWord() {
+            let wordInput = document.getElementById("wordInput");
+            let userInput = wordInput.value.trim().toLowerCase();
+            wordInput.value = "";
+            
+            if (userInput === currentWord) {
+                score += attempts === 3 ? 10 : attempts === 2 ? 7 : 4;
+            } else {
+                attempts--;
+                if (attempts === 0) {
+                    document.getElementById("message").textContent = "Incorrecto. La palabra era: " + currentWord;
+                    wordsPlayed++;
+                    setTimeout(startGame, 5000);
+                    return;
+                } else {
+                    document.getElementById("message").textContent = "Incorrecto. Intentos restantes: " + attempts;
+                    return;
+                }
+            }
+            wordsPlayed++;
+            document.getElementById("score").textContent = "Puntaje: " + score;
+            document.getElementById("wordCount").textContent = "Palabras jugadas: " + wordsPlayed + "/10";
+            startGame();
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+    </script>
+</body>
+</html>
+
+
