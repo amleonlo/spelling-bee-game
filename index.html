@@ -25,7 +25,18 @@
 </head>
 <body>
 
-    <h1>Spelling Bee Game</h1>
+    <h1>Spelling Bee Game 3°</h1>
+    <p><strong>Reglas del Juego:</strong></p>
+    <ul>
+        <li>Escucha la palabra y escríbela correctamente.</li>
+        <li>Tienes 3 intentos para cada palabra.</li>
+        <li>Si aciertas en el primer intento, ganas 10 puntos.</li>
+        <li>Si aciertas en el segundo intento, ganas 7 puntos.</li>
+        <li>Si aciertas en el tercer intento, ganas 4 puntos.</li>
+        <li>Si no aciertas después de 3 intentos, el puntaje es 0.</li>
+        <li>Después de cada palabra, el juego avanza automáticamente.</li>
+        <li>El juego termina después de 10 palabras.</li>
+    </ul>
     <button onclick="startGame()">🎤 Iniciar Juego</button>
     <button onclick="repeatWord()">🔄 Repetir Palabra</button>
     <br>
@@ -86,9 +97,9 @@
             if (!currentWord) return;
             let speech = new SpeechSynthesisUtterance(currentWord);
             speech.lang = "en-US";
-            speech.rate = 0.5;
-            speech.pitch = 1.2;
-            speech.volume = 1;
+            speech.rate = 0.4;
+            speech.pitch = 1.0;
+            speech.volume = 1.0;
             if (englishVoice) {
                 speech.voice = englishVoice;
             }
@@ -125,5 +136,6 @@
     </script>
 </body>
 </html>
+
 
 
