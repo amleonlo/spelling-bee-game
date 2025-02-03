@@ -41,10 +41,10 @@
     <h2>Palabras Jugadas:</h2>
     <p id="playedWords"></p>
     <button onclick="startGame()">🎤 Iniciar Juego</button>
-    <button onclick="repeatWord()">🔄 Repetir Palabra</button>
+    <button id="repeatButton" onclick="repeatWord()" disabled>🔄 Repetir Palabra</button>
     <br>
     <div id="letterInputs"></div>
-    <button onclick="checkWord()">Enviar</button>
+    <button id="checkButton" onclick="checkWord()" disabled>Enviar</button>
     <p id="message">Intentos restantes: 3</p>
     <p id="score">Puntaje: 0</p>
     <p id="wordCount">Palabras jugadas: 0/10</p>
@@ -63,6 +63,8 @@
         }
 
         function startGame() {
+            document.getElementById("repeatButton").disabled = false;
+            document.getElementById("checkButton").disabled = false;
             if (wordsPlayed >= 10) {
                 document.getElementById("message").textContent = "Juego terminado. Puntaje final: " + score;
                 setTimeout(() => location.reload(), 5000);
@@ -116,7 +118,7 @@
                     document.getElementById("playedWords").textContent += currentWord + ", ";
                     document.getElementById("message").textContent = "Incorrecto. La palabra era: " + currentWord;
                     wordsPlayed++;
-                    setTimeout(startGame, 5000);
+                    setTimeout(startGame, 4000);
                     return;
                 } else {
                     document.getElementById("message").textContent = "Incorrecto. Intentos restantes: " + attempts;
