@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spelling Bee Game</title>
+    <title>Spelling Bee Game 3° v.0.1</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
 </head>
 <body>
 
-    <h1>Spelling Bee Game 3°</h1>
+    <h1>Spelling Bee Game 3° v.0.1</h1>
     <p><strong>Reglas del Juego:</strong></p>
     <ul>
         <li>Escucha la palabra y escríbela correctamente.</li>
@@ -37,6 +37,8 @@
         <li>Después de cada palabra, el juego avanza automáticamente.</li>
         <li>El juego termina después de 10 palabras.</li>
     </ul>
+    <h2>Palabras Jugadas:</h2>
+    <p id="playedWords"></p>
     <button onclick="startGame()">🎤 Iniciar Juego</button>
     <button onclick="repeatWord()">🔄 Repetir Palabra</button>
     <br>
@@ -83,8 +85,10 @@
         }
 
         function startGame() {
+            document.getElementById("message").textContent = "Intentos restantes: 3";
             if (wordsPlayed >= 10) {
                 document.getElementById("message").textContent = "Juego terminado. Puntaje final: " + score;
+                setTimeout(() => location.reload(), 5000);
                 return;
             }
             currentWord = words[Math.floor(Math.random() * words.length)];
@@ -107,15 +111,21 @@
         }
 
         function checkWord() {
+            function updatePlayedWords(word) {
+                let playedWordsElement = document.getElementById("playedWords");
+                playedWordsElement.textContent += word + ", ";
+            }
             let wordInput = document.getElementById("wordInput");
             let userInput = wordInput.value.trim().toLowerCase();
             wordInput.value = "";
             
             if (userInput === currentWord) {
+                updatePlayedWords(currentWord);
                 score += attempts === 3 ? 10 : attempts === 2 ? 7 : 4;
             } else {
                 attempts--;
                 if (attempts === 0) {
+                    updatePlayedWords(currentWord);
                     document.getElementById("message").textContent = "Incorrecto. La palabra era: " + currentWord;
                     wordsPlayed++;
                     setTimeout(startGame, 5000);
@@ -134,8 +144,15 @@
         speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
     </script>
+    
+
+    <script>
+        
+    </script>
 </body>
 </html>
+
+
 
 
 
